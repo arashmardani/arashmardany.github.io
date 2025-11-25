@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="utf-8">
+    <title>Ê»ùÃÌù«Ìù«” „‰ »« Leaflet - ‰”ŒÂ —«Ìê«‰</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <style>
+        body { margin:0; padding:0; direction: rtl; font-family: Tahoma; }
+        #map { height: 100vh; }
+        .info { padding: 6px 8px; background: white; border-radius: 5px; box-shadow: 0 0 15px rgba(0,0,0,0.2); }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // ”«Œ  ‰ﬁ‘Â
+        const map = L.map('map').setView([32.4279, 53.6880], 5); // „—ò“ «Ì—«‰
+
+        // ·«ÌÂ Å«ÌÂ OpenStreetMap (—«Ìê«‰)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        // «÷«›Â ò—œ‰ „«—ò— „À«· ( Â—«‰)
+        L.marker([35.6892, 51.3890]).addTo(map)
+            .bindPopup('<b> Â—«‰</b><br>Å«Ì Œ  «Ì—«‰').openPopup();
+
+        // «÷«›Â ò—œ‰ Ìò ·«ÌÂ GeoJSON („À·« „—“ «” «‰ùÂ« - «Ì‰Ã« Ìò ‰„Ê‰Â ”«œÂ)
+        const iranProvinces = { /* „Ìù Ê‰Ìœ GeoJSON ò«„· —Ê «“ ”«Ì ùÂ«Ì —«Ìê«‰ »êÌ—Ìœ */ };
+        
+        // Ì« „” ﬁÌ„ «“ URL —«Ìê«‰
+        fetch('https://raw.githubusercontent.com/alirezaso/iran-geojson/main/iran.provinces.geojson')
+            .then(r => r.json())
+            .then(data => {
+                L.geoJSON(data, {
+                    style: { color: "#ff7800", weight: 2, fillOpacity: 0.3 },
+                    onEachFeature: (feature, layer) => {
+                        layer.bindPopup(`<b>${feature.properties.name}</b>`);
+                    }
+                }).addTo(map);
+            });
+
+        // ·ÊêÊ Ê  Ê÷ÌÕ« 
+        L.control.scale().addTo(map);
+        map.attributionControl.addAttribution('”«Œ Â ‘œÂ »« ò„ò Grok —«Ìê«‰');
+    </script>
+</body>
+</html>
